@@ -1,0 +1,10 @@
+poudriere: {
+    #url: "file:///usr/local/poudriere/data/packages/13_0-CURRENT-HEAD
+    #mirror_type: "srv",
+    url: "http://localhost/packages/13_0-CURRENT-HEAD
+    mirror_type: "http",
+    signature_type: "pubkey",
+    pubkey: "/usr/local/etc/ssl/certs/sahuagin_poudriere.cert",
+    enabled: yes,
+    priority: 100
+}

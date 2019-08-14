@@ -3,6 +3,23 @@
   become: yes
   become_user: "root"
   tasks:
+  - name: bootstrap a host without python installed
+    raw: pkg install -y python36
+    become_method: su
+
+  - name: bootstrap a host without sudo installed
+    raw: pkg install -y sudo
+    become_method: su
+
+  - name: Allow wheel to sudo to root
+    raw: echo "%wheel ALL=(ALL) ALL" >> /usr/local/etc/sudoers
+    become_method: su
+
+  - name: Add the group 'ansible' 
+    group: 
+      name: ansible
+      state: present
+
   - name: Add the user 'ansible' and place into groups ansible,wheel
     user:
       name: "ansible"
@@ -11,6 +28,19 @@
       groups: ansible,wheel
       shell: "/bin/csh"
       ssh_key_file: ".ssh/id_rsa"
+
+  - name: Move the public ssh key for ansible to the machine
+    authorized_key:
+      user: ansible
+      state: present
+      key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
+
+  - name: Move the public ssh key for tcovert to the machine
+    authorized_key:
+      user: tcovert
+      state: present
+      key: "{{ lookup('file', 'keys/tcovert_authorized_keys') }}"
+      path: '~tcovert/.ssh/authorized_keys'
 
   - name: Add basic packages to make a machine usable for ansible
     pkgng:

@@ -38,6 +38,8 @@ gitsah.sahuagin.net
 
 [bootstrap_freebsd]
 #test-ansible.sahuagin.net
+test-poudriere.sahuagin.net ansible_ssh_user=tcovert
+
 
 [bootstrap_freebsd:vars]
 ansible_python_interpreter=/usr/local/bin/python3.6
@@ -46,5 +48,8 @@ ansible_connection=paramiko
 [development]
 #threadripper.sahuagin.net
 test-ansible.sahuagin.net
+
+[poudriere]
+test-poudriere.sahuagin.net
 
 

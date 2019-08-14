@@ -1,0 +1,27 @@
+---
+# tasks file for poudriere
+- name: Ensure that poudriere is installed
+  pkgng:
+    pkg: poudriere
+    state: installed
+- name: create poudriere data directory
+  file:
+    dest: '/usr/local/poudriere/data'
+    state: directory
+    mode: 750
+    owner: root
+    group: wheel
+- name: create pkg directory
+  file:
+    dest: '/usr/local/etc/pkg/repos'
+    state: directory
+    mode: 750
+    owner: root
+    group: wheel
+- name: copy repository files to pkg/repos
+  copy:
+    src: pkg/repos/
+    dest: /usr/local/etc/pkg/repos/
+    owner: root
+    group: wheel
+
