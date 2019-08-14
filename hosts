@@ -37,9 +37,12 @@ gitsah.sahuagin.net
 127.0.0.1
 
 [bootstrap_freebsd]
-test-ansible.sahuagin.net
+#test-ansible.sahuagin.net
 
 [bootstrap_freebsd:vars]
 ansible_python_interpreter=/usr/local/bin/python3.6
 ansible_connection=paramiko
 
+[development]
+threadripper.sahuagin.net
+test-ansible.sahuagin.net
