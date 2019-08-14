@@ -1,0 +1,19 @@
+---
+- hosts: bootstrap_freebsd
+  become: yes
+  become_user: "root"
+  tasks:
+  - name: Add the user 'ansible' and place into groups ansible,wheel
+    user:
+      name: "ansible"
+      comment: Add the functional account ansible, no password
+      state: present
+      groups: ansible,wheel
+      shell: "/bin/csh"
+      ssh_key_file: ".ssh/id_rsa"
+
+  - name: Add basic packages to make a machine usable for ansible
+    pkgng:
+      name: [ 'neovim', 'bash', 'sudo', 'python36', 'zsh', 'rsync', 'tmux' ] 
+      state: latest 
+

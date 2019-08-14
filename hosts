@@ -1,48 +1,45 @@
-# This is the default ansible 'hosts' file.
-#
-# It should live in /usr/local/etc/ansible/hosts
-#
-#   - Comments begin with the '#' character
-#   - Blank lines are ignored
-#   - Groups of hosts are delimited by [header] elements
-#   - You can enter hostnames or ip addresses
-#   - A hostname/ip can be a member of multiple groups
+[all:children]
+freebsd
+linux
+bootstrap_freebsd
 
-# Ex 1: Ungrouped hosts, specify before any group headers.
+[all:vars]
+ansible_user='ansible'
+ansible_become='yes'
+#ansible_become_method='smart'
+ansible_python_interpreter='/usr/bin/env python3.6'
 
-## green.example.com
-## blue.example.com
-## 192.168.100.1
-## 192.168.100.10
+[freebsd:children]
+bare_metal
+jail
+local
 
-# Ex 2: A collection of hosts belonging to the 'webservers' group
+[freebsd:vars]
+ansible_python_interpreter=/usr/local/bin/python3.6
+ansible_connection=paramiko
 
-## [webservers]
-## alpha.example.org
-## beta.example.org
-## 192.168.1.100
-## 192.168.1.110
+[linux]
 
-# If you have multiple hosts following a pattern you can specify
-# them like this:
+[bare_metal]
+threadripper.sahuagin.net
+#freenas.sahuagin.net
 
-## www[001:006].example.com
+[offline]
+#onslaught.sahuagin.net
 
-# Ex 3: A collection of database servers in the 'dbservers' group
+[jail]
+#redmine.sahuagin.net
+plex.sahuagin.net
+gitsah.sahuagin.net
 
-## [dbservers]
-## 
-## db01.intranet.mydomain.net
-## db02.intranet.mydomain.net
-## 10.25.1.56
-## 10.25.1.57
 
-# Here's another example of host ranges, this time there are no
-# leading 0s:
+[local]
+127.0.0.1
 
-## db-[99:101]-node.example.com
+[bootstrap_freebsd]
+test-ansible.sahuagin.net
 
-[freebsd]
-test-ansible.sahuagin.net ansible_connection=paramiko
-
+[bootstrap_freebsd:vars]
+ansible_python_interpreter=/usr/local/bin/python3.6
+ansible_connection=paramiko
 
