@@ -1,0 +1,10 @@
+---
+# tasks file for developer_desktop
+- hosts: development
+  become: yes
+  tasks:
+  - name: Install standard development packages
+    pkgng:
+      name: [ 'a2ps', 'cmake', 'bash-completion', 'boost-all', 'ca_root_nss', 'chromium', 'llvm-devel', 'cowsay', 'cscope', 'ctags', 'curl', 'git', 'gnupg', 'tmux-mem-cpu-load', 'gitflow' ]
+      state: latest
+
