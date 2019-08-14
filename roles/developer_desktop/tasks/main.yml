@@ -1,10 +1,19 @@
 ---
 # tasks file for developer_desktop
-- hosts: development
-  become: yes
-  tasks:
-  - name: Install standard development packages
-    pkgng:
-      name: [ 'a2ps', 'cmake', 'bash-completion', 'boost-all', 'ca_root_nss', 'chromium', 'llvm-devel', 'cowsay', 'cscope', 'ctags', 'curl', 'git', 'gnupg', 'tmux-mem-cpu-load', 'gitflow' ]
-      state: latest
-
+- name: load variables from syscontrol
+  include_vars:
+    file: sysctl-vars.yaml
+    name: sysctl_config
+- name: Install standard development packages
+  pkgng:
+    name: [ 'a2ps', 'cmake', 'bash-completion', 'boost-all', 'ca_root_nss', 'chromium', 'llvm-devel', 'cowsay', 'cscope', 'ctags', 'curl', 'git', 'gnupg', 'tmux-mem-cpu-load', 'gitflow' ]
+    state: latest
+- name: Change various sysctl settings, look at the sysctl-vars file for documentation
+  sysctl:
+    name: '{{ item.key }}'
+    value: '{{ item.value }}'
+    sysctl_set: yes
+    state: present
+    reload: yes
+    ignoreerrors: yes
+  with_dict: '{{ sysctl_config }}'

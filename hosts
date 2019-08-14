@@ -44,5 +44,7 @@ ansible_python_interpreter=/usr/local/bin/python3.6
 ansible_connection=paramiko
 
 [development]
-threadripper.sahuagin.net
+#threadripper.sahuagin.net
 test-ansible.sahuagin.net
+
+

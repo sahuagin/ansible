@@ -1,0 +1,206 @@
+---
+# contains the sysctl variables that we want to set on developer desktops
+# good link on network and zfs tuning https://calomel.org/freebsd_network_tuning.html
+  security.bsd.see_other_uids: 0
+  security.bsd.see_other_gids: 0
+  security.bsd.see_jail_proc: 0
+  security.bsd.unprivileged_read_msgbuf: 0
+  kern.randompid: 2360
+  #vfs.zfs.min_auto_ashift: 12
+  #
+  # for linux
+  kern.fallback_elf_brand: 3
+  #
+  #
+  security.bsd.stack_guard_page: 1
+  #needed for chromium to work
+  kern.ipc.shm_allow_removed: 1
+  #
+  # enable kernel bypass/TCP offloading for chelsio card
+  #dev.t5nex.0.toe.ddp: 1
+  #dev.t5nex.0.toe.tx_zcopy: 1
+  # 
+  #
+   #grace
+  hw.snd.default_unit: 6
+  hw.snd.default_auto: 6
+  #
+  #cullums fault
+  #allow users to mount disks without root permissions
+  vfs.usermount: 1
+  #
+  #make desktop more responsiveunder high CPU load
+  kern.sched.preempt_thresh: 224
+  #
+  #disable annoying system beep
+  hw.syscons.bell: 0
+  # kern.vt.enable_bell: 0
+  #
+  #enable ipv6 autoconfiguration
+  net.inet6.ip6.accept_rtadv: 1
+  #
+  # https://calomel.org/freebsd_network_tuning.html
+  #
+  # some tweaks to boost network performance over long, fat pipes - see the
+  # networking section of cullums server guide for details
+  #net.inet.tcp.cc.algorithm: htcp
+  #
+  #
+  net.inet.tcp.cc.htcp.adaptive_backoff: 1
+  #net.inet.tcp.cc.htcp.rtt_scaling: 1
+  net.inet.tcp.cc.algorithm: cdg # default newreno
+  net.inet.tcp.cc.cdg.alpha_inc: 1
+  kern.ipc.maxsockbuf: 16777216 # 10G :default 2097152
+  #
+  net.inet.tcp.syncache.rexmtlimit: 0
+  #net.inet.tcp.abc_l_var: 44 # if net.inet.tcp.mssdflt :  1460
+  #net.inet.tcp.mssdflt: 1460
+  # for No Frags with HTTP/3 QUIC
+  net.inet.tcp.mssdflt: 1240
+  #
+  #net.inet.tcp.initcwnd_segments: 44 # bsd 11.2 if net.inet.tcp.mssdflt :  1460
+  #
+  #net.inet.tcp.isn_reeseed_interval: 4500
+  #
+  #
+  net.inet.tcp.minmss: 536
+  net.inet.tcp.rfc6675_pipe: 1
+  net.inet.tcp.syncookies: 0
+  net.inet.tcp.nolocaltimewait: 1
+  kern.ipc.soacceptqueue: 1024
+  #kern.ipc.maxsockbuf: 8388608
+  net.inet.tcp.sendspace: 262144
+  net.inet.tcp.recvspace: 262144
+  net.inet.tcp.sendbuf_max: 16777216
+  net.inet.tcp.recvbuf_max: 16777216
+  net.inet.tcp.sendbuf_inc: 32768
+  net.inet.tcp.recvbuf_inc: 65536
+  net.local.stream.sendspace: 16384
+  net.local.stream.recvspace: 16384
+  net.inet.raw.maxdgram: 16384
+  net.inet.raw.recvspace: 16384
+  #net.inet.tcp.abc_l_var: 44
+  #net.inet.tcp.initcwnd_segments: 44
+  #net.inet.tcp.mssdflt: 1448
+  #net.inet.tcp.minmss: 524
+  net.inet.ip.intr_queue_maxlen: 2048
+  net.route.netisr_maxqlen: 2048
+  #
+  kern.random.fortuna.minpoolsize: 128
+  #
+  #
+  #
+  #hardened and DoS mitigation
+  kern.ipc.shm_use_phys: 1
+  kern.msgbuf_show_timestamp: 1
+  #
+  net.inet.icmp.drop_redirect: 1
+  net.inet.sctp.blackhole: 2
+  net.inet.tcp.blackhole: 2
+  net.inet.tcp.drop_synfin: 1
+  net.inet.tcp.fast_finwait2_recycle: 1
+  net.inet.tcp.finwait2_timeout: 1000
+  net.inet.tcp.icmp_may_rst: 0
+  net.inet.tcp.keepcnt: 3
+  net.inet.tcp.keepidle: 62000
+  net.inet.tcp.keepinit: 5000
+  net.inet.tcp.msl: 2500
+  net.inet.udp.blackhole: 1
+  
+  #security.bsd.hardlink_check_gid: 1 # disable with mailman
+  ##security.bsd.hardlink_check_uid: 1 # disable with mailman
+  #
+  # NVME tuning
+  vfs.zfs.delay_min_dirty_percent: 96
+  # :  max_max in loader.conf
+  # 6G
+  vfs.zfs.dirty_data_max: 6442450944
+  # 12G
+  #vfs.zfs.dirty_data_max: 12884901888
+  # when to force a commit group, I've chosen max_max minus 1GB
+  # 6G -1G
+  vfs.zfs.dirty_data_sync: 5368709120
+  # 12G - 1G
+  #vfs.zfs.dirty_data_sync: 11811160064
+  # in loader.conf
+  vfs.zfs.min_auto_ashift: 12
+  # activate this if prefetch falls below 10%
+  #vfs.zfs.prefetch_disable: 1
+  vfs.zfs.top_maxinflight: 128
+  vfs.zfs.trim.txg_delay: 2
+  #
+  vfs.zfs.txg.timeout: 90 # default 5sec, force tx group at 90 seconds to increase aggregated data
+  vfs.zfs.vdev.aggregation_limit: 1048576 # aggregated eight(8) TXG into a single sequential TXG, make divisible by largest pool recordsize default 131072, 128KB)
+  vfs.zfs.vdev.write_gap_limit: 0 # gap between 2 aggregated writes, 0 to minimize frags (default 4096, 4KB)
+  #
+  # Our Hardware: the Samsung 960 EVO NVMe 1TB white paper specifies a single
+  # # drive can sequentially read at 3,200 MB/sec and sequentially write at 1,900
+  # # MB/sec. Random writes are 360,000 IOPs and random reads are 380,000 IOPs all
+  # # with four(4) threads and a queue depth of 32. So, four(4) threads times a
+  # # queue depth of 32 times one(1) NVMe drive means the vfs.zfs.top_maxinflight
+  # # should be set to 128 maximum number of outstanding IOPs per top-level vdev.
+  # # (4_threads_*_32_queues_*_1_drive: 128).
+  #
+  # # When determining the size of the dirty_data_max look at the amount of fast,
+  # # first and second tier cache available in the NVMe drives. For example, the
+  # # Samsung 960 EVO NVMe 1TB has six(6) gigabytes of first tier cache plus thirty
+  # # six(36) gigabytes of second tier, dynamic cache. The 960 EVO can write at
+  # # 1.95 gigabytes per second when the drive is properly cooled meaning
+  # # eleven(11) gigabytes of dirty_data_sync can be committed to the NVMe drive in
+  # # less than six(6) seconds. Enzotech passive copper heat sinks (14mm x 14mm x
+  # # 14mm, copper, 8-pack) work well to cool our NVMe drives.
+  #
+  # # Dirty "modified" data in RAM can be read from, written to and modified even
+  # # before the data is committed to disk. If the data set is rapidly changing,
+  # MB/sec. Random writes are 360,000 IOPs and random reads are 380,000 IOPs all
+  # # with four(4) threads and a queue depth of 32. So, four(4) threads times a
+  # # queue depth of 32 times one(1) NVMe drive means the vfs.zfs.top_maxinflight
+  # # should be set to 128 maximum number of outstanding IOPs per top-level vdev.
+  # # (4_threads_*_32_queues_*_1_drive: 128).
+  #
+  # # When determining the size of the dirty_data_max look at the amount of fast,
+  # # first and second tier cache available in the NVMe drives. For example, the
+  # # Samsung 960 EVO NVMe 1TB has six(6) gigabytes of first tier cache plus thirty
+  # # six(36) gigabytes of second tier, dynamic cache. The 960 EVO can write at
+  # # 1.95 gigabytes per second when the drive is properly cooled meaning
+  # # eleven(11) gigabytes of dirty_data_sync can be committed to the NVMe drive in
+  # # less than six(6) seconds. Enzotech passive copper heat sinks (14mm x 14mm x
+  # # 14mm, copper, 8-pack) work well to cool our NVMe drives.
+  #
+  # # Dirty "modified" data in RAM can be read from, written to and modified even
+  # # before the data is committed to disk. If the data set is rapidly changing,
+  # # like during database transactions or bittorrent traffic, the changes will be
+  # # made solely to RAM in between TXG commits. Only the latest copy of the data in
+  # # RAM will be written to disk on TXG commit.
+  #
+  # # Make sure not to ever reach the dirty_data_sync limit especially if the zfs
+  # # logbias is set to latency. Logbias latency will double write the same
+  # # incoming data to ZIL and to the disk when dirty_data_sync is reached. Take a
+  # # look at zfs logbias throughput to avoid these double writes. If the server is
+  # # accepting data on a 1Gbit interface then dirty_data_sync should be larger
+  # # than the incoming true throughput of the network times the txg.timeout;
+  # # 118MB/sec times 90 seconds is 10.62GByte of dirty_data_sync RAM space which
+  # # is one(1) gigabyte below our value of dirty_data_sync which is a good safety
+  # # buffer.
+  #
+  # # The ZFS commit logic order is sync_read, sync_write, async_read, async_write
+  # # and finally scrub/resilver.
+ 
+ 
+  # see https://calomel.org/freebsd_network_tuning.html for details.
+ 
+  # : : : :  network performance
+  # disable hardware flow control on intel network interfaces. TCP will do a
+  # better job 99% of the time.
+  dev.igb.0.fc: 0
+ 
+  # http://service.chelsio.com/beta/drivers/ChelsioUwire-FBSD-3.0.0.1/Chelsio-UnifiedWire-FreeBSD-UserGuide.pdf
+  #hw.cxgbe.config_file: "flash"
+  # #hw.cxgbe.rdmacaps_allowed: 0xff
+  # #hw.cxgbe.iscsicaps_allowed: 0xf
+  # ## keyboard locked found something that suggested this
+  hw.pci.realloc_bars: 1
+  #
+  # # increases UFS read ahead
+  vfs.read_max: 128
+  #

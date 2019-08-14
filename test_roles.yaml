@@ -1,0 +1,6 @@
+---
+# used for testing of the roles
+- hosts: development
+  roles:
+    - developer_desktop
+
