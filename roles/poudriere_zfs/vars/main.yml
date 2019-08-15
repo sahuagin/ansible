@@ -1,0 +1,4 @@
+---
+# vars file for poudriere_zfs
+  zfs_pools: true
+

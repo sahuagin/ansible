@@ -38,7 +38,8 @@ gitsah.sahuagin.net
 
 [bootstrap_freebsd]
 #test-ansible.sahuagin.net
-test-poudriere.sahuagin.net ansible_ssh_user=tcovert
+#test-poudriere.sahuagin.net ansible_ssh_user=tcovert
+test-poudriere.sahuagin.net
 
 
 [bootstrap_freebsd:vars]

@@ -3,7 +3,7 @@
 - name: Ensure that poudriere is installed
   pkgng:
     pkg: poudriere
-    state: installed
+    state: latest
 - name: create poudriere data directory
   file:
     dest: '/usr/local/poudriere/data'

@@ -1,0 +1,28 @@
+---
+# tasks file for nginx
+- name: Install Nginx
+  pkgng:
+    name: [ 'nginx' ]
+    state: latest
+  notify:
+    - Start Nginx
+
+- name: Add nginx config
+  copy:
+    src: nginx
+    dest: /usr/local/etc/
+    owner: root
+    group: wheel
+    mode: 0750
+- name: Create web root
+  file:
+    dest: '/usr/local/poudriere/data'
+    mode: 755
+    state: directory
+    owner: root
+    group: wheel
+    recurse: yes
+  notify:
+    - Reload Nginx
+
+

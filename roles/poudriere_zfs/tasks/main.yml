@@ -1,0 +1,45 @@
+---
+# tasks file for poudriere_zfs
+- name: manage_zfs | checking existing zpool(s)
+  shell: "zpool list | awk 'FNR >1' | awk '{print $1}'"
+  changed_when: false
+  register: zpools
+  check_mode: no
+  when: zfs_pools is defined
+
+- name: manage_zfs | Gather ZPool status
+  shell: zpool status
+  changed_when: false
+  register: zpool_devices
+  check_mode: no
+  when: zfs_pools is defined
+
+- debug:
+    var: hostvars[inventory_hostname]
+    verbosity: 4
+- debug: msg= 'ZFS pool {{ item }}'
+  with_items: "{{ zpools.stdout_lines }}"
+
+#- name: Ensure that there is a poudriere dataset
+#  zfs: 
+#    name: "{{ zpools.stdout_lines[0] }}/poudriere"
+#    state: present
+#    extra_zfs_properties: [mountpoint: "/usr/local/" ]
+#    ignore_errors: yes 
+
+
+#"zpools": {
+#  "changed": false,
+#  "cmd": "zpool list | awk 'FNR >1' | awk '{print $1}'",
+#  "delta": "0:00:00.014130",
+#  "end": "2019-08-14 20:14:07.170276",
+#  "failed": false,
+#  "rc": 0,
+#  "start": "2019-08-14 20:14:07.156146",
+#  "stderr": "",
+#  "stderr_lines": [],
+#  "stdout": "volume1",
+#  "stdout_lines": [
+#  "volume1"
+#  ]
+#}
